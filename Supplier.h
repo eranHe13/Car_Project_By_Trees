@@ -21,22 +21,22 @@ typedef struct {
     long sum_of_general_deals_withSupp;
 } Supplier;
 
-typedef struct SupplierList {
+typedef struct SupplierNode {
     Supplier *data;
-    struct SupplierTree *right;
-    struct SupplierTree *left;
-} SupplierList;
+    struct SupplierNode *right;
+    struct SupplierNode *left;
+} SupplierNode;
 
 
 typedef struct SupplierTree {
-    SupplierList *root;
+    SupplierNode *root;
     int elementCount;
 } SupplierTree;
 
+SupplierTree* createSupplierTree();
 
-SupplierList *createSupplierList();
 
-int addNewSupplier(SupplierList **head);
+int addNewSupplier(SupplierTree *suppTree);
 
 int deleteSupplier(SupplierList **head);
 

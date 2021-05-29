@@ -189,7 +189,7 @@ CarNode *deleteCarHelper(CarNode* root, char *licenseNumberCheck, int* elementCo
 
 int deleteCar(CarTree *tree) {
     char licenseNumberCheck[LICENSE_NUM_LEN + 1];
-    if (tree == NULL) {
+    if (tree->root == NULL) {
         printf("NO cars\n");
         return FALSE;
     }
@@ -204,22 +204,22 @@ int deleteCar(CarTree *tree) {
 
 }
 
-void nodeClear(CarNode* node){
+void carNodeClear(CarNode* node){
     if (node == NULL){
         return;
     }
-    nodeClear(node->left);
-    nodeClear(node->right);
+    carNodeClear(node->left);
+    carNodeClear(node->right);
     freeCar(node);
 }
 
 int deleteAllCars(CarTree* tree){
-    if (tree == NULL){
+    if (tree->root == NULL){
         tree->elementCount = 0;
         printf("Tree empty\n");
         return TRUE;
     }
-    nodeClear(tree->root);
+    carNodeClear(tree->root);
     tree->elementCount = 0;
     tree->root = NULL;
     printf("Tree has been deleted\n");

@@ -131,7 +131,7 @@ int addNewCar(CarTree *carTree) {
     } else {
         carTree->root = addCarNodeToTree(carTree->root, newCar);
     }
-
+    carTree->elementCount++;
     return 1;
 }
 
@@ -171,15 +171,15 @@ CarNode *deleteCarHelper(CarNode* root, char *licenseNumberCheck) {
     }
     else{
         CarNode*  x = root->right;
+        CarNode* temp = NULL;
         CarNode** xParent = &(root->right);
         while (x->left){
             xParent = &(x->left);
             x = x->left;
         }
-        strcpy(root->data->license_number,x->data->license_number);
-        strcpy(root->data->chassis_number,x->data->chassis_number);
+        temp = x;
         root->data = x->data;
-        *xParent = deleteCarHelper(x,x->data->license_number);
+        *xParent = deleteCarHelper(temp,temp->data->license_number);
     }
     return root;
 }
@@ -197,7 +197,60 @@ int deleteCar(CarTree *tree) {
         return FALSE;
     }
     tree->root =  deleteCarHelper(tree->root, licenseNumberCheck);
+
     return TRUE;
 
 }
 
+void nodeClear(CarNode* node){
+    if (node == NULL){
+        return;
+    }
+    nodeClear(node->left);
+    nodeClear(node->right);
+    freeCar(node);
+}
+
+int deleteAllCars(CarTree* tree){
+    if (tree == NULL){
+        tree->elementCount = 0;
+        printf("Tree empty\n");
+        return TRUE;
+    }
+    nodeClear(tree->root);
+    tree->elementCount = 0;
+    tree->root = NULL;
+    printf("Tree has been deleted\n");
+    return TRUE;
+}
+
+int carNumberWithGivenCapacityHelper(CarNode* root, int engineCapacity){
+    int sumR,sumL;
+    int counter = 0;
+    if (root==NULL){
+        return 0;
+    }
+    if (root->data->engine_cap==engineCapacity){
+        counter = 1;
+    } else{
+        counter = 0;
+    }
+    sumR = carNumberWithGivenCapacityHelper(root->right,engineCapacity);
+    sumL = carNumberWithGivenCapacityHelper(root->left,engineCapacity);
+    return sumR + sumL +counter;
+}
+
+int carNumberWithGivenCapacity(CarTree* tree){
+    int counter = 0;
+    int engineCapacity;
+    if (tree == NULL) {
+        printf("No cars\n");
+        return 0;
+    }
+    printf("Enter engine capacity\n");
+    scanf("%d",&engineCapacity);
+
+    counter = carNumberWithGivenCapacityHelper(tree->root,engineCapacity);
+    return counter;
+
+}

@@ -36,4 +36,6 @@ typedef struct CarTree {
 CarTree *createCarTree();
 int addNewCar(CarTree *carTree);
 int deleteCar(CarTree *tree);
+int deleteAllCars(CarTree* tree);
+int carNumberWithGivenCapacity(CarTree* tree);
 #endif

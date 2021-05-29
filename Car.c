@@ -143,43 +143,46 @@ void freeCar(CarNode *carNode) {
     checked_free(carNode);
 }
 
-CarNode *deleteCarHelper(CarNode* root, char *licenseNumberCheck) {
+CarNode *deleteCarHelper(CarNode* root, char *licenseNumberCheck, int* elementCounter) {
     if (root == NULL) {
         return NULL;
     }
     if (strcmp(licenseNumberCheck, root->data->license_number) != 0) {
         if (strcmp(licenseNumberCheck, root->data->license_number) < 0) {
-            root->left = deleteCarHelper(root->left, licenseNumberCheck);
+            root->left = deleteCarHelper(root->left, licenseNumberCheck,elementCounter);
         } else {
-            root->right = deleteCarHelper(root->right, licenseNumberCheck);
+            root->right = deleteCarHelper(root->right, licenseNumberCheck,elementCounter);
         }
         return root;
     }
     if ((root->left == NULL) && (root->right == NULL)) {
         freeCar(root);
+        (*elementCounter)--;
         return NULL;
     }
     else if(root->left==NULL){
         CarNode* temp = root->right;
         freeCar(root);
+        (*elementCounter)--;
         return temp;
     }
     else if(root->right==NULL){
         CarNode* temp = root->left;
         freeCar(root);
+        (*elementCounter)--;
         return temp;
     }
     else{
         CarNode*  x = root->right;
-        CarNode* temp = NULL;
+        Car* temp = root->data;
         CarNode** xParent = &(root->right);
         while (x->left){
             xParent = &(x->left);
             x = x->left;
         }
-        temp = x;
         root->data = x->data;
-        *xParent = deleteCarHelper(temp,temp->data->license_number);
+        x->data = temp;
+        *xParent = deleteCarHelper(x,x->data->license_number,elementCounter);
     }
     return root;
 }
@@ -196,8 +199,7 @@ int deleteCar(CarTree *tree) {
         printf("License number is not valid\n");
         return FALSE;
     }
-    tree->root =  deleteCarHelper(tree->root, licenseNumberCheck);
-
+    tree->root =  deleteCarHelper(tree->root, licenseNumberCheck,&tree->elementCount);
     return TRUE;
 
 }

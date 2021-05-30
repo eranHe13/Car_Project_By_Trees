@@ -3,7 +3,7 @@
 
 
 
-void display(SupplierNode *suppRoot){
+void printSuppliers(SupplierNode *suppRoot){
     SupplierNode *tmp = suppRoot;
     if(tmp==NULL)
         return;

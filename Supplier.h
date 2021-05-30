@@ -33,19 +33,19 @@ typedef struct SupplierTree {
     int elementCount;
 } SupplierTree;
 
-SupplierTree* createSupplierTree();
-
+SupplierTree *createSupplierTree();
 
 int addNewSupplier(SupplierTree *suppTree);
 
-int  deleteAllSuppliers(SupplierTree *suppTree);
+int deleteAllSuppliers(SupplierTree *suppTree);
 
 int deleteSupplier(SupplierTree *suppTree);
 
-void display(SupplierNode *suppRoot);
-char** threeGreatestSuppliers(SupplierTree* supptree ,char threeGreatSupp[3][11] );
+void printSuppliers(SupplierNode *suppRoot);
 
-long averageOfSupplierMoney(SupplierNode* supptree   , long * n );
+char **threeGreatestSuppliers(SupplierTree *supptree, char threeGreatSupp[3][11]);
+
+long averageOfSupplierMoney(SupplierNode *supptree, long *n);
 
 
 #endif

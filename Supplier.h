@@ -45,7 +45,7 @@ void printSuppliers(SupplierNode *suppRoot);
 
 char **threeGreatestSuppliers(SupplierTree *supptree, char threeGreatSupp[3][11]);
 
-long averageOfSupplierMoney(SupplierNode *supptree, long *n);
+long averageOfSupplierMoney(SupplierNode *supptree);
 
 
 #endif

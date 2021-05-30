@@ -38,16 +38,14 @@ SupplierTree* createSupplierTree();
 
 int addNewSupplier(SupplierTree *suppTree);
 
-int deleteSupplier(SupplierList **head);
+int  deleteAllSuppliers(SupplierTree *suppTree);
 
-int deleteAllSuppliers(SupplierList **head);
+int deleteSupplier(SupplierTree *suppTree);
 
-char **threeGreatestSuppliers_REC(SupplierList **head, char threeGreatSupp[3][11]);
+void display(SupplierNode *suppRoot);
+char** threeGreatestSuppliers(SupplierTree* supptree ,char threeGreatSupp[3][11] );
 
-char **threeGreatestSuppliers(SupplierList **head, char threeGreatSupplier[3][11]);
-
-
-
+long averageOfSupplierMoney(SupplierNode* supptree   , long * n );
 
 
-#endif //CAR_PROJECT_BY_TREES_SUPPLIER_H
+#endif

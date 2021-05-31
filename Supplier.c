@@ -27,7 +27,7 @@ SupplierTree *createSupplierTree() {
 
 Supplier *initSupplier() {
     /*INITIALIZING THE SUPPLIER*/
-    int check = 0;
+    int check = 9;
     char authorized_dealer_num[AUTH_DEALER_NUM_LEN + 1];
     char *supplier_name = (char *) checked_malloc(sizeof(char) * 1024);
     char supplier_phone_num[SUPP_PHONE_LEN + 1];
@@ -35,59 +35,59 @@ Supplier *initSupplier() {
     int number_of_deals_withSupp;
     Supplier *temporarySupp = (Supplier *) checked_malloc(sizeof(Supplier));
     while (check != 1) {
-        printf("enter authorized_dealer_num (10 DIGITS): ");
+        printf("enter authorized dealer num (10 DIGITS): ");
         scanf("%s", authorized_dealer_num);
         if ((valid_digit_check(authorized_dealer_num) == 0) ||
             (check_equal_size(authorized_dealer_num, AUTH_DEALER_NUM_LEN) == 0)) {
             printf("authorized dealer number not valid\n");
-        } else
+        } else{
             strcpy(temporarySupp->authorized_dealer_num, authorized_dealer_num);
-            check = 1;
+            check = 1;}
     }
-    check = 0;
+    check = 9;
 
     while (check != 1) {
-        printf("enter supplier_name : ");
+        printf("enter supplier name : ");
         scanf("%s", supplier_name);
         if (valid_char_check(supplier_name) == 0) {
             printf("supplier name not valid\n");
-        } else
+        } else{
             temporarySupp->supplier_name = dupstr(supplier_name);
-            check = 1;
+            check = 1;}
     }
-    check = 0;
+    check = 8;
 
     while (check != 1) {
-        printf("enter  supplier_phone_num (10 DIGITS): ");
+        printf("enter  supplier phone num (10 DIGITS): ");
         scanf("%s", supplier_phone_num);
         if ((check_equal_size(supplier_phone_num, SUPP_PHONE_LEN) == 0) ||
             (valid_digit_check(supplier_phone_num) == 0)) {
             printf("supplier phone number not valid\n");
-        } else
+        } else{
             strcpy(temporarySupp->supplier_phone_num, supplier_phone_num);
-            check = 1;
+            check = 1;}
     }
-    check = 0;
+    check = 9;
 
     while (check != 1) {
-        printf("enter  number_of_deals_withSupp (5 DIGITS): ");
+        printf("enter  number of deals withSupp (5 DIGITS): ");
         scanf("%d", &number_of_deals_withSupp);
         if (valid_int(number_of_deals_withSupp, MIN_NUM_DEALS, MAX_NUM_DEALS) == 0) {
             printf("number of deals not valid\n");
-        } else
+        } else{
             temporarySupp->number_of_deals_withSupp = number_of_deals_withSupp;
-            check = 1;
+            check = 1;}
     }
-    check = 0;
+    check = 9;
 
     while (check != 1) {
-        printf("enter  sum_of_general_deals_withSupp (10 DIGITS): ");
+        printf("enter  sum of general deals withSupp (10 DIGITS): ");
         scanf("%ld", &sum_of_general_deals_withSupp);
         if (valid_long(sum_of_general_deals_withSupp, MIN_SUM_DEALS, MAX_SUM_DEALS) == 0) {
             printf("sum of general deals not valid\n");
-        } else
+        } else{
             temporarySupp->sum_of_general_deals_withSupp = sum_of_general_deals_withSupp;
-            check = 1;
+            check = 1;}
     }
     return temporarySupp;
 }
@@ -264,11 +264,9 @@ char **threeGreatestSuppliers(SupplierTree *supptree, char threeGreatSupp[3][11]
 }
 
 
-long averageOfSupplierMoney(SupplierNode *node ) {
-    int deals;
+long averageOfSupplierMoney(SupplierNode *node  , long *sum, long *deals, int suppnum) {
     if (node == NULL) return 0;
-    return ((averageOfSupplierMoney(node->left)+ averageOfSupplierMoney(node->right) + node->data->sum_of_general_deals_withSupp)/
-            (averageOfSupplierMoney(node->left)+ averageOfSupplierMoney(node->right) + node->data->number_of_deals_withSupp));
+    return *sum/ suppnum;
     }
 
 

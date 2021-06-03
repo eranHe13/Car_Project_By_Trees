@@ -170,7 +170,7 @@ ClientNode *addClientNodeToTree(ClientNode *clientRoot, ClientNode *newClient) {
 }
 
 int addNewClient(ClientTree *clientTree) {
-    /* if client is valid add new car to the list*/
+    /* if client is valid add new car to the list */
     ClientNode *newClient = (ClientNode *) checked_malloc(sizeof(ClientNode));
     newClient->data = initClient();
     newClient->left = NULL;

@@ -93,6 +93,7 @@ int deleteAllClientsLinkedList(ClientLinkedNode **ClientHead) {
         *ClientHead = temp->next;
         checked_free(temp);
     }
+    checked_free(ClientHead);
     printf("ALL CLIENTS REMOVED\n");
     return TRUE;
 }
@@ -100,8 +101,9 @@ int deleteAllClientsLinkedList(ClientLinkedNode **ClientHead) {
 
 void menu(SupplierTree *supplierTree, ClientTree *clientTree, CarTree *carTree) {
     /* menu program for adding and getting details from all the structs*/
-    char threeGreatSupplier[3][11];
     ClientLinkedNode * clientList = (ClientLinkedNode* ) checked_malloc(sizeof(ClientLinkedNode));
+    char threeGreatSupplier[3][11];
+    int temp ;
     int stop = 20;
     while (stop != 0) {
         printf("----------------------------------");
@@ -132,19 +134,20 @@ void menu(SupplierTree *supplierTree, ClientTree *clientTree, CarTree *carTree) 
                 car(carTree);
                 break;
             case 4:
-                clientNumberWithGivenCarYear(carTree , clientTree);
+                printf("Client number with the same car year : %d\n", clientNumberWithGivenCarYear(carTree , clientTree));
                 break;
             case 5:
-                carNumberWithGivenCapacity(carTree);
+                printf("Number of cars with the same capacity  : %d\n", carNumberWithGivenCapacity(carTree));
                 break;
             case 6:
                 clientList =  findClient(clientTree);
+                deleteAllClientsLinkedList(&clientList);
                 break;
             case 7:
                 threeGreatestSuppliers(supplierTree, threeGreatSupplier);
                 break;
             case 8:
-                averageOfSupplierMoney(supplierTree->root,supplierTree->elementCount);
+                printf("Average of suppliers money : %ld\n", averageOfSupplierMoney(supplierTree->root,supplierTree->elementCount));
                 break;
             case 9:
                 printClientCarsForGivenRentDate(clientTree);
@@ -162,7 +165,8 @@ void menu(SupplierTree *supplierTree, ClientTree *clientTree, CarTree *carTree) 
                 break;
         }
     }
-    deleteAllClientsLinkedList(&clientList);
+
+
 }
 
 

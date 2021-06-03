@@ -203,6 +203,7 @@ ClientNode *deleteClientHelper(ClientNode *root, char *idCheck, int *elementCoun
         }
         return root;
     }
+    else{
     if ((root->left == NULL) && (root->right == NULL)) {
         freeClient(root);
         (*elementCounter)--;
@@ -228,11 +229,12 @@ ClientNode *deleteClientHelper(ClientNode *root, char *idCheck, int *elementCoun
         root->data = x->data;
         x->data = temp;
         *xParent = deleteClientHelper(x, x->data->id, elementCounter);
-    }
+    }}
     return root;
 }
 
 int deleteClient(ClientTree *tree) {
+    int tmp = tree->elementCount;
     char idCheck[ID_LEN + 1];
     if (tree == NULL) {
         printf("NO clients\n");
@@ -245,6 +247,8 @@ int deleteClient(ClientTree *tree) {
         return FALSE;
     }
     tree->root = deleteClientHelper(tree->root, idCheck, &tree->elementCount);
+    if(tree->elementCount == tmp) printf("Client doesnt found\n");
+    else printf("Car removed\n");
     return TRUE;
 
 }

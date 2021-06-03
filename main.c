@@ -1,5 +1,5 @@
 
-#include "menu.h"
+
 #include <stdio.h>
 #include "Supplier.h"
 #include "Client.h"
@@ -85,9 +85,23 @@ void delete(SupplierTree *supplierTree, ClientTree *clientTree, CarTree *carTree
     }
 }
 
+int deleteAllClientsLinkedList(ClientLinkedNode **ClientHead) {
+    /*REMOVE ALL THE CLIENTS*/
+    ClientLinkedNode *temp = (*ClientHead);
+    while (*ClientHead != NULL) {
+        temp = *ClientHead;
+        *ClientHead = temp->next;
+        checked_free(temp);
+    }
+    printf("ALL CLIENTS REMOVED\n");
+    return TRUE;
+}
+
+
 void menu(SupplierTree *supplierTree, ClientTree *clientTree, CarTree *carTree) {
     /* menu program for adding and getting details from all the structs*/
     char threeGreatSupplier[3][11];
+    ClientLinkedNode * clientList = (ClientLinkedNode* ) checked_malloc(sizeof(ClientLinkedNode));
     int stop = 20;
     while (stop != 0) {
         printf("----------------------------------");
@@ -124,19 +138,19 @@ void menu(SupplierTree *supplierTree, ClientTree *clientTree, CarTree *carTree) 
                 carNumberWithGivenCapacity(carTree);
                 break;
             case 6:
-                Find client;
+                clientList =  findClient(clientTree);
                 break;
             case 7:
                 threeGreatestSuppliers(supplierTree, threeGreatSupplier);
                 break;
             case 8:
-                Average of supplier money
+                averageOfSupplierMoney(supplierTree->root,supplierTree->elementCount);
                 break;
             case 9:
                 printClientCarsForGivenRentDate(clientTree);
                 break;
             case 10:
-                printSuppliers(supplierTree);
+                printSuppliers(supplierTree->root);
                 break;
             case 11:
                 delete(supplierTree, clientTree, carTree);
@@ -148,9 +162,11 @@ void menu(SupplierTree *supplierTree, ClientTree *clientTree, CarTree *carTree) 
                 break;
         }
     }
+    deleteAllClientsLinkedList(&clientList);
 }
 
-/*
+
+
 int main() {
     ClientTree *clientTree = createClientTree();
     SupplierTree *suppHead = createSupplierTree();
@@ -159,7 +175,10 @@ int main() {
     deleteAllCars(carTree);
     deleteAllClients(clientTree);
     deleteAllSuppliers(suppHead);
+    checked_free(clientTree);
+    checked_free(carTree);
+    checked_free(suppHead);
     check_for_exit();
     return 0;
-}*/
+}
 

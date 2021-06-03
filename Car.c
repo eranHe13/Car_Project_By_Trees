@@ -3,12 +3,12 @@
 
 
 CarTree *createCarTree() {
+    /*Creat new tree of cars*/
     CarTree *tree = (CarTree *) checked_malloc(sizeof(CarTree));
     tree->root = NULL;
     tree->elementCount = 0;
     return tree;
 }
-
 
 Car *init_car() {
     /* init a Vehicle struct by given details*/
@@ -149,6 +149,7 @@ Car *init_car() {
 }
 
 CarNode *addCarNodeToTree(CarNode *carRoot, CarNode *newCar) {
+    /* Add new car to the tree*/
     if (carRoot == NULL) {
         return newCar;
     } else {
@@ -170,7 +171,7 @@ CarNode *addCarNodeToTree(CarNode *carRoot, CarNode *newCar) {
 }
 
 int addNewCar(CarTree *carTree) {
-    /* if car is valid add new car to the list*/
+    /* If car is valid add new car to the list*/
     CarNode *newCar = (CarNode *) checked_malloc(sizeof(CarNode));
     newCar->data = init_car();
     newCar->left = NULL;
@@ -185,6 +186,7 @@ int addNewCar(CarTree *carTree) {
 }
 
 void freeCar(CarNode *carNode) {
+    /*Free memory of car */
     checked_free(carNode->data->color);
     checked_free(carNode->data->maker);
     checked_free(carNode->data->model);
@@ -193,6 +195,7 @@ void freeCar(CarNode *carNode) {
 }
 
 CarNode *deleteCarHelper(CarNode *root, char *licenseNumberCheck, int *elementCounter) {
+    /*Check for the given car to delete and replace his position if needed*/
     if (root == NULL) {
         return NULL;
     }
@@ -235,6 +238,7 @@ CarNode *deleteCarHelper(CarNode *root, char *licenseNumberCheck, int *elementCo
 }
 
 int deleteCar(CarTree *tree) {
+    /*Delete car by help funcs*/
     char licenseNumberCheck[LICENSE_NUM_LEN + 1];
     int tmpCount = tree->elementCount;
     if (tree->root == NULL) {
@@ -256,6 +260,7 @@ int deleteCar(CarTree *tree) {
 }
 
 void carNodeClear(CarNode *node) {
+    /*Delete the car struct*/
     if (node == NULL) {
         return;
     }
@@ -265,6 +270,7 @@ void carNodeClear(CarNode *node) {
 }
 
 int deleteAllCars(CarTree *tree) {
+    /*Delete all the cars by help */
     if (tree->root == NULL) {
         tree->elementCount = 0;
         printf("Tree empty\n");
@@ -278,6 +284,7 @@ int deleteAllCars(CarTree *tree) {
 }
 
 int carNumberWithGivenCapacityHelper(CarNode *root, int engineCapacity) {
+    /* return the number of cars with the same capacity*/
     int sumR, sumL;
     int counter = 0;
     if (root == NULL) {
@@ -294,6 +301,7 @@ int carNumberWithGivenCapacityHelper(CarNode *root, int engineCapacity) {
 }
 
 int carNumberWithGivenCapacity(CarTree *tree) {
+    /* return the number of cars with the same capacity*/
     int counter = 0;
     int engineCapacity;
     if (tree == NULL) {

@@ -14,7 +14,8 @@ void printSuppliers(SupplierNode *suppRoot) {
            "Sum of deals in general: %ld\n\n",
            tmp->data->supplier_name,
            tmp->data->authorized_dealer_num,
-           tmp->data->supplier_phone_num, tmp->data->number_of_deals_withSupp,
+           tmp->data->supplier_phone_num,
+           tmp->data->number_of_deals_withSupp,
            tmp->data->sum_of_general_deals_withSupp);
     printSuppliers(tmp->right);
 }
@@ -43,9 +44,10 @@ Supplier *initSupplier() {
         if ((valid_digit_check(authorized_dealer_num) == 0) ||
             (check_equal_size(authorized_dealer_num, AUTH_DEALER_NUM_LEN) == 0)) {
             printf("authorized dealer number not valid\n");
-        } else{
+        } else {
             strcpy(temporarySupp->authorized_dealer_num, authorized_dealer_num);
-            check = 1;}
+            check = 1;
+        }
     }
     check = 0;
     /*supplier_name check */
@@ -54,9 +56,10 @@ Supplier *initSupplier() {
         scanf("%s", supplier_name);
         if (valid_char_check(supplier_name) == 0) {
             printf("supplier name not valid\n");
-        } else{
+        } else {
             temporarySupp->supplier_name = dupstr(supplier_name);
-            check = 1;}
+            check = 1;
+        }
     }
     check = 0;
     /*supplier_phone_num check*/
@@ -66,9 +69,10 @@ Supplier *initSupplier() {
         if ((check_equal_size(supplier_phone_num, SUPP_PHONE_LEN) == 0) ||
             (valid_digit_check(supplier_phone_num) == 0)) {
             printf("supplier phone number not valid\n");
-        } else{
+        } else {
             strcpy(temporarySupp->supplier_phone_num, supplier_phone_num);
-            check = 1;}
+            check = 1;
+        }
     }
     check = 0;
     /*number of deals withSupp check*/
@@ -77,9 +81,10 @@ Supplier *initSupplier() {
         scanf("%d", &number_of_deals_withSupp);
         if (valid_int(number_of_deals_withSupp, MIN_NUM_DEALS, MAX_NUM_DEALS) == 0) {
             printf("number of deals not valid\n");
-        } else{
+        } else {
             temporarySupp->number_of_deals_withSupp = number_of_deals_withSupp;
-            check = 1;}
+            check = 1;
+        }
     }
     check = 0;
     /*sum of general deals withSupp check*/
@@ -88,9 +93,10 @@ Supplier *initSupplier() {
         scanf("%ld", &sum_of_general_deals_withSupp);
         if (valid_long(sum_of_general_deals_withSupp, MIN_SUM_DEALS, MAX_SUM_DEALS) == 0) {
             printf("sum of general deals not valid\n");
-        } else{
+        } else {
             temporarySupp->sum_of_general_deals_withSupp = sum_of_general_deals_withSupp;
-            check = 1;}
+            check = 1;
+        }
     }
     return temporarySupp;
 }
@@ -101,13 +107,13 @@ SupplierNode *addNodeToTree(SupplierNode *suppRoot, SupplierNode *newSupp) {
         return newSupp;
     } else {
         if (suppRoot->right == NULL || suppRoot->left == NULL) {
-            if (strcmp(newSupp->data->authorized_dealer_num , suppRoot->data->authorized_dealer_num)<=0) {
+            if (strcmp(newSupp->data->authorized_dealer_num, suppRoot->data->authorized_dealer_num) <= 0) {
                 suppRoot->left = addNodeToTree(suppRoot->left, newSupp);
             } else {
                 suppRoot->right = addNodeToTree(suppRoot->right, newSupp);
             }
         } else {
-            if (strcmp(newSupp->data->authorized_dealer_num , suppRoot->data->authorized_dealer_num)<=0) {
+            if (strcmp(newSupp->data->authorized_dealer_num, suppRoot->data->authorized_dealer_num) <= 0) {
                 addNodeToTree(suppRoot->left, newSupp);
             } else {
                 addNodeToTree(suppRoot->right, newSupp);
@@ -170,51 +176,52 @@ SupplierNode *deleteSupplierHelper(SupplierNode *root, char *authorized_dealer_n
         return NULL;
     }
     if (strcmp(root->data->authorized_dealer_num, authorized_dealer_num) != 0) {
-        if (strcmp(root->data->authorized_dealer_num ,authorized_dealer_num)<=0){
+        if (strcmp(authorized_dealer_num, root->data->authorized_dealer_num) <= 0) {
             root->left = deleteSupplierHelper(root->left, authorized_dealer_num, elementCounter);
-        } else{
+        } else {
             root->right = deleteSupplierHelper(root->right, authorized_dealer_num, elementCounter);
+        }
+    } else {
+        if ((root->left == NULL) && (root->right == NULL)) {
+            checked_free(root->data->supplier_name);
+            checked_free(root->data);
+            checked_free(root);
+            (*elementCounter)--;
+            return NULL;
+        } else if (root->left == NULL) {
+            SupplierNode *temp = root->right;
+            checked_free(root->data->supplier_name);
+            checked_free(root->data);
+            checked_free(root);
+            (*elementCounter)--;
+            return temp;
+        } else if (root->right == NULL) {
+            SupplierNode *temp = root->left;
+            checked_free(root->data->supplier_name);
+            checked_free(root->data);
+            checked_free(root);
+            (*elementCounter)--;
+            return temp;
+        } else {
+            SupplierNode *x = root->right;
+            Supplier *temp = root->data;
+            SupplierNode **xParent = &(root->right);
+            while (x->left) {
+                xParent = &(x->left);
+                x = x->left;
+            }
+            root->data = x->data;
+            x->data = temp;
+            *xParent = deleteSupplierHelper(x, x->data->authorized_dealer_num, elementCounter);
         }
     }
 
-    if ((root->left == NULL) && (root->right == NULL)) {
-        checked_free(root->data->supplier_name);
-        checked_free(root->data);
-        checked_free(root);
-        (*elementCounter)--;
-        return NULL;
-    } else if (root->left == NULL) {
-        SupplierNode *temp = root->right;
-        checked_free(root->data->supplier_name);
-        checked_free(root->data);
-        checked_free(root);
-        (*elementCounter)--;
-        return temp;
-    } else if (root->right == NULL) {
-        SupplierNode *temp = root->left;
-        checked_free(root->data->supplier_name);
-        checked_free(root->data);
-        checked_free(root);
-        (*elementCounter)--;
-        return temp;
-    } else {
-        SupplierNode *x = root->right;
-        Supplier *temp = root->data;
-        SupplierNode **xParent = &(root->right);
-        while (x->left) {
-            xParent = &(x->left);
-            x = x->left;
-        }
-        root->data = x->data;
-        x->data = temp;
-        *xParent = deleteSupplierHelper(x, x->data->authorized_dealer_num, elementCounter);
-        (*elementCounter)--;
-    }
     return root;
 }
 
 int deleteSupplier(SupplierTree *suppTree) {
     /*Removing supplier by authorized dealer number get help from  deleteSupplierHelper func*/
+    int tmpCount = suppTree->elementCount;
     char authorized_dealer_num[AUTH_DEALER_NUM_LEN + 1];
     if (suppTree->root == NULL) {
         printf("NO SUPPLIERS\n");
@@ -223,10 +230,10 @@ int deleteSupplier(SupplierTree *suppTree) {
     printf("enter authorized_dealer_num (10 DIGITS): ");
     scanf("%s", authorized_dealer_num);
     suppTree->root = deleteSupplierHelper(suppTree->root, authorized_dealer_num, &suppTree->elementCount);
-
+    if (tmpCount == suppTree->elementCount) printf("Supplier doesnt found\n");
+    else printf("Supplier deleted\n");
     return 1;
 }
-
 
 void threeGreatSuppliersHelper(SupplierNode *head, long check, char biggestSupplier[AUTH_DEALER_NUM_LEN + 1],
                                char threeGreatSupp[3][11]) {
@@ -254,7 +261,7 @@ char **threeGreatestSuppliers(SupplierTree *supptree, char threeGreatSupp[3][11]
     int i = 0;
     char biggestSupplier[AUTH_DEALER_NUM_LEN + 1];
     SupplierNode *temp = supptree->root;
-    if (supptree == NULL || temp == NULL) {
+    if (temp == NULL) {
         printf("NO SUPPLIERS \n");
     }
     while (countDown > 0) {
@@ -276,15 +283,16 @@ char **threeGreatestSuppliers(SupplierTree *supptree, char threeGreatSupp[3][11]
 }
 
 
-long averageOfSupplierMoney(SupplierNode *temp , int supplierCounter){
-    long sumRight= 0;
-    long sumLeft= 0;
-    if(temp == NULL) {
-        return 0;}
-    sumLeft = averageOfSupplierMoney(temp->left , supplierCounter);
-    sumLeft = averageOfSupplierMoney(temp->right , supplierCounter);
-        return (sumLeft + sumRight + temp->data->sum_of_general_deals_withSupp) / supplierCounter;
+double averageOfSupplierMoney(SupplierNode *temp, int supplierCounter) {
+    double sumRight;
+    double sumLeft;
+    if (temp == NULL) {
+        return 0;
     }
+    sumLeft = averageOfSupplierMoney(temp->left, supplierCounter);
+    sumRight = averageOfSupplierMoney(temp->right, supplierCounter);
+    return sumLeft + sumRight + ((double) temp->data->sum_of_general_deals_withSupp) / supplierCounter;
+}
 
 
 

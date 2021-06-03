@@ -2,6 +2,7 @@
 #include "Common.h"
 
 void clientNumberWithGivenCarYearHelperSecond(CarNode *carNode, ClientNode *clientNode, int *counter) {
+    /*second helper compare license number of car and client and count the ones with the same year */
     if (clientNode == NULL) {
         return;
     }
@@ -16,6 +17,7 @@ void clientNumberWithGivenCarYearHelperSecond(CarNode *carNode, ClientNode *clie
 
 void clientNumberWithGivenCarYearHelperFirst(CarNode *carNode, ClientNode *clientNode, int *counter,
                                              int carManufactureYear) {
+    /*first helper check if the car is in the given year and send it to second helper  */
     if (carNode == NULL) {
         return;
     }
@@ -27,6 +29,7 @@ void clientNumberWithGivenCarYearHelperFirst(CarNode *carNode, ClientNode *clien
 }
 
 int clientNumberWithGivenCarYear(CarTree *carTree, ClientTree *clientTree) {
+    /*return the number of client that have car in the same year */
     int carManufactureYear;
     int counter = 0;
     if (carTree == NULL || clientTree == NULL) {

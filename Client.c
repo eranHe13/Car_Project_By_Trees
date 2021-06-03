@@ -2,6 +2,7 @@
 #include "Client.h"
 
 ClientTree *createClientTree() {
+    /*create empty client tree */
     ClientTree *tree = (ClientTree *) checked_malloc(sizeof(ClientTree));
     tree->root = NULL;
     tree->elementCount = 0;
@@ -156,6 +157,7 @@ Client *initClient() {
 }
 
 ClientNode *addClientNodeToTree(ClientNode *clientRoot, ClientNode *newClient) {
+    /*add new client to the tree */
     if (clientRoot == NULL) {
         return newClient;
     } else {
@@ -177,7 +179,7 @@ ClientNode *addClientNodeToTree(ClientNode *clientRoot, ClientNode *newClient) {
 }
 
 int addNewClient(ClientTree *clientTree) {
-    /* if client is valid add new car to the list */
+    /* add new car to the list */
     ClientNode *newClient = (ClientNode *) checked_malloc(sizeof(ClientNode));
     newClient->data = initClient();
     newClient->left = NULL;
@@ -192,6 +194,7 @@ int addNewClient(ClientTree *clientTree) {
 }
 
 void freeClient(ClientNode *clientNode) {
+    /*free all dynamic fields and data */
     checked_free(clientNode->data->first_name);
     checked_free(clientNode->data->last_name);
     checked_free(clientNode->data);
@@ -199,6 +202,7 @@ void freeClient(ClientNode *clientNode) {
 }
 
 ClientNode *deleteClientHelper(ClientNode *root, char *idCheck, int *elementCounter) {
+    /*help deleting the given client */
     if (root == NULL) {
         return NULL;
     }
@@ -241,6 +245,7 @@ ClientNode *deleteClientHelper(ClientNode *root, char *idCheck, int *elementCoun
 }
 
 int deleteClient(ClientTree *tree) {
+    /*delete client by given ID */
     int tmp = tree->elementCount;
     char idCheck[ID_LEN + 1];
     int flag = FALSE;
@@ -264,6 +269,7 @@ int deleteClient(ClientTree *tree) {
 }
 
 void clientNodeClear(ClientNode *node) {
+    /* help to delete all clients */
     if (node == NULL) {
         return;
     }
@@ -273,8 +279,8 @@ void clientNodeClear(ClientNode *node) {
 }
 
 int deleteAllClients(ClientTree *tree) {
+    /*delete all clients */
     if (tree == NULL) {
-        tree->elementCount = 0;
         printf("Tree empty\n");
         return FALSE;
     }
@@ -286,6 +292,7 @@ int deleteAllClients(ClientTree *tree) {
 }
 
 int printClientCarsForGivenRentDateHelper(ClientNode *clientNode, int year, int month, int day, int *counter) {
+    /*help in recursion to print all clients with the same date */
     if (clientNode == NULL) {
         return 0;
     }
@@ -342,6 +349,7 @@ ClientLinkedNode *addToListC(ClientLinkedNode **ClientHead, Client *client) {
 
 
 ClientLinkedNode *findClientById(ClientNode *root, ClientLinkedNode **head, char idCheck[ID_LEN + 1]) {
+    /*finding client by Id and create linked list */
     if ((root) == NULL) {
         return NULL;
     }
@@ -354,6 +362,7 @@ ClientLinkedNode *findClientById(ClientNode *root, ClientLinkedNode **head, char
 }
 
 ClientLinkedNode *findClientByDate(ClientNode *root, ClientLinkedNode **head, int year, int month, int day) {
+    /*find client by date and create linked list */
     if ((root) == NULL) {
         return NULL;
     }
@@ -367,6 +376,7 @@ ClientLinkedNode *findClientByDate(ClientNode *root, ClientLinkedNode **head, in
 }
 
 ClientLinkedNode *findClient(ClientTree *clientTree) {
+    /*find client and return linked list by ID or by date */
     int option, year, month, day;
     int flag = FALSE;
     char idCheck[ID_LEN + 1];

@@ -165,11 +165,6 @@ int addNewCar(CarTree *carTree) {
     /* if car is valid add new car to the list*/
     CarNode *newCar = (CarNode *) checked_malloc(sizeof(CarNode));
     newCar->data = init_car();
-    if (newCar->data == NULL) {
-        printf("Car was not added!\n");
-        checked_free(newCar);
-        return FALSE;
-    }
     newCar->left = NULL;
     newCar->right = NULL;
     if (carTree->root == NULL) {

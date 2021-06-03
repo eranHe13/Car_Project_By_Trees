@@ -3,6 +3,7 @@
 
 
 void printSuppliers(SupplierNode *suppRoot) {
+    /* Prints all supplier*/
     SupplierNode *tmp = suppRoot;
     if (tmp == NULL)
         return;
@@ -19,6 +20,7 @@ void printSuppliers(SupplierNode *suppRoot) {
 }
 
 SupplierTree *createSupplierTree() {
+    /*Creat binary tree os suppliers*/
     SupplierTree *suppTree = (SupplierTree *) checked_malloc(sizeof(SupplierTree));
     suppTree->elementCount = 0;
     suppTree->root = NULL;
@@ -26,7 +28,7 @@ SupplierTree *createSupplierTree() {
 }
 
 Supplier *initSupplier() {
-    /*INITIALIZING THE SUPPLIER*/
+    /*Initializing supplier struct */
     int check = 9;
     char authorized_dealer_num[AUTH_DEALER_NUM_LEN + 1];
     char *supplier_name = (char *) checked_malloc(sizeof(char) * 1024);
@@ -34,6 +36,7 @@ Supplier *initSupplier() {
     long sum_of_general_deals_withSupp;
     int number_of_deals_withSupp;
     Supplier *temporarySupp = (Supplier *) checked_malloc(sizeof(Supplier));
+    /*authorized_dealer_num check */
     while (check != 1) {
         printf("enter authorized dealer num (10 DIGITS): ");
         scanf("%s", authorized_dealer_num);
@@ -44,8 +47,8 @@ Supplier *initSupplier() {
             strcpy(temporarySupp->authorized_dealer_num, authorized_dealer_num);
             check = 1;}
     }
-    check = 9;
-
+    check = 0;
+    /*supplier_name check */
     while (check != 1) {
         printf("enter supplier name : ");
         scanf("%s", supplier_name);
@@ -55,8 +58,8 @@ Supplier *initSupplier() {
             temporarySupp->supplier_name = dupstr(supplier_name);
             check = 1;}
     }
-    check = 8;
-
+    check = 0;
+    /*supplier_phone_num check*/
     while (check != 1) {
         printf("enter  supplier phone num (10 DIGITS): ");
         scanf("%s", supplier_phone_num);
@@ -67,8 +70,8 @@ Supplier *initSupplier() {
             strcpy(temporarySupp->supplier_phone_num, supplier_phone_num);
             check = 1;}
     }
-    check = 9;
-
+    check = 0;
+    /*number of deals withSupp check*/
     while (check != 1) {
         printf("enter  number of deals withSupp (5 DIGITS): ");
         scanf("%d", &number_of_deals_withSupp);
@@ -78,8 +81,8 @@ Supplier *initSupplier() {
             temporarySupp->number_of_deals_withSupp = number_of_deals_withSupp;
             check = 1;}
     }
-    check = 9;
-
+    check = 0;
+    /*sum of general deals withSupp check*/
     while (check != 1) {
         printf("enter  sum of general deals withSupp (10 DIGITS): ");
         scanf("%ld", &sum_of_general_deals_withSupp);
@@ -93,6 +96,7 @@ Supplier *initSupplier() {
 }
 
 SupplierNode *addNodeToTree(SupplierNode *suppRoot, SupplierNode *newSupp) {
+    /*Add new supplier to the tree*/
     if (suppRoot == NULL) {
         return newSupp;
     } else {
@@ -114,6 +118,7 @@ SupplierNode *addNodeToTree(SupplierNode *suppRoot, SupplierNode *newSupp) {
 }
 
 int addNewSupplier(SupplierTree *suppTree) {
+    /*Crate new supplier and adding to the tree*/
     SupplierNode *newSupp = (SupplierNode *) checked_malloc(sizeof(SupplierNode));
     newSupp->data = initSupplier();
     newSupp->left = NULL;
@@ -128,6 +133,7 @@ int addNewSupplier(SupplierTree *suppTree) {
 }
 
 void supplierNodeClear(SupplierNode *node) {
+    /*Removing all suppliers*/
     if (node == NULL) {
         return;
     }
@@ -139,11 +145,13 @@ void supplierNodeClear(SupplierNode *node) {
 }
 
 void deleteTree(SupplierTree *suppTree) {
+    /*Removing the tree*/
     checked_free(suppTree);
     printf("Tree has been deleted\n");
 }
 
 int deleteAllSuppliers(SupplierTree *suppTree) {
+    /*Removing all the suppliers and tree by functions help*/
     if (suppTree->root == NULL) {
         suppTree->elementCount = 0;
         printf("Tree empty\n");
@@ -157,14 +165,13 @@ int deleteAllSuppliers(SupplierTree *suppTree) {
 }
 
 SupplierNode *deleteSupplierHelper(SupplierNode *root, char *authorized_dealer_num, int *elementCounter) {
+    /*Remove supplier from the tree*/
     if (root == NULL) {
         return NULL;
     }
     if (strcmp(root->data->authorized_dealer_num, authorized_dealer_num) != 0) {
         root->left = deleteSupplierHelper(root->left, authorized_dealer_num, elementCounter);
         root->right = deleteSupplierHelper(root->left, authorized_dealer_num, elementCounter);
-
-
     }
 
     if ((root->left == NULL) && (root->right == NULL)) {
@@ -204,6 +211,7 @@ SupplierNode *deleteSupplierHelper(SupplierNode *root, char *authorized_dealer_n
 }
 
 int deleteSupplier(SupplierTree *suppTree) {
+    /*Removing supplier by authorized dealer number get help from  deleteSupplierHelper func*/
     char authorized_dealer_num[AUTH_DEALER_NUM_LEN + 1];
     if (suppTree->root == NULL) {
         printf("NO SUPPLIERS\n");
@@ -219,7 +227,7 @@ int deleteSupplier(SupplierTree *suppTree) {
 
 void threeGreatSuppliersHelper(SupplierNode *head, long check, char biggestSupplier[AUTH_DEALER_NUM_LEN + 1],
                                char threeGreatSupp[3][11]) {
-    /*HELP threeGreatestSuppliers FUNK IN RECURSION*/
+    /*Find the three greatest Suppliers  */
     SupplierNode *temp = head;
     if (temp == NULL) {
         return;
@@ -236,6 +244,7 @@ void threeGreatSuppliersHelper(SupplierNode *head, long check, char biggestSuppl
 
 
 char **threeGreatestSuppliers(SupplierTree *supptree, char threeGreatSupp[3][11]) {
+    /*return and prints the three greatest suppliers get help from threeGreatSuppliersHelper func*/
     int countDown = 3;
     long check = 0;
     int index = 0;
@@ -264,12 +273,15 @@ char **threeGreatestSuppliers(SupplierTree *supptree, char threeGreatSupp[3][11]
 }
 
 
-long averageOfSupplierMoney(SupplierNode *node  , long *sum, long *deals, int suppnum) {
-    if (node == NULL) return 0;
-    return *sum/ suppnum;
+long averageOfSupplierMoney(SupplierNode *temp , int supplierCounter){
+    int sumRight= 0;
+    int sumLeft= 0;
+    if(temp == NULL) {
+        return 0;}
+    sumLeft = averageOfSupplierMoney(temp->left , supplierCounter);
+    sumLeft = averageOfSupplierMoney(temp->right , supplierCounter);
+        return (sumLeft + sumRight + temp->data->sum_of_general_deals_withSupp) / supplierCounter;
     }
-
-
 
 
 

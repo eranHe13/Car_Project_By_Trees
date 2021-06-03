@@ -51,26 +51,6 @@ void print_time(Time t) {
     printf("%d\n", t.minute);
 }
 
-int client_valid(char *first_name, char *last_name, char *id, char *license_number, int price_per_rent) {
-    /*CHECK FOR CLIENT VALIDATION USING FUNCTION FROM ValueChecker*/
-    if (valid_char_check(first_name) == FALSE) {
-        return FALSE;
-    }
-    if (valid_char_check(last_name) == FALSE) {
-        return FALSE;
-    }
-    if (valid_digit_check(id) == FALSE || check_equal_size(id, ID_LEN) == FALSE) {
-        return FALSE;
-    }
-    if (valid_digit_check(license_number) == FALSE || check_equal_size(license_number, LICENSE_LEN) == FALSE) {
-        return FALSE;
-    }
-    if (valid_int(price_per_rent, 100, 999) == FALSE) {
-        return FALSE;
-    }
-    return TRUE;
-}
-
 Client *initClient() {
     /*INIT CLIENT BY GIVEN DETAILS AND USING client_valid func*/
     Client *client = (Client *) checked_malloc(sizeof(Client));
@@ -82,42 +62,89 @@ Client *initClient() {
     int year, month, day, hour, minute;
     Time time_of_rent;
     int price_per_rent;
+    int check = 0;
     printf("NEW CLIENT : \n");
-    printf("Enter ID (9 digits): \n");
-    scanf("%s", id);
-    printf("Enter first name: \n");
-    scanf("%s", first_name);
-    printf("Enter last name: \n");
-    scanf("%s", last_name);
-    printf("Enter license number (7 digits): \n");
-    scanf("%s", license_num);
-    printf("Enter date: year , month , day\n");
-    scanf("%d %d %d", &year, &month, &day);
-    printf("Enter time: hour , minute\n");
-    scanf("%d %d", &hour, &minute);
-    printf("Enter price per rent for 24 hours (number of 3 digits): \n");
-    scanf("%d", &price_per_rent);
-    date_of_rent = create_date(year, month, day);
-    time_of_rent = create_time(hour, minute);
-
-    if (client_valid(first_name, last_name, id, license_num,
-                     price_per_rent) == TRUE && date_of_rent.day != 0 && time_of_rent.hour != 0) {
-        strcpy(client->id, id);
-        strcpy(client->license_number, license_num);
-        client->first_name = dupstr(first_name);
-        client->last_name = dupstr(last_name);
-        client->date_of_rent = date_of_rent;
-        client->hour_of_rent = time_of_rent;
-        client->price_per_rent = price_per_rent;
-        return client;
-    } else {
-        client = NULL;
-        checked_free(first_name);
-        checked_free(last_name);
-
+    /* Check ID*/
+    while (check != 1) {
+        printf("Enter ID (9 digits): \n");
+        scanf("%s", id);
+        if (valid_digit_check(id) == FALSE || check_equal_size(id, ID_LEN) == FALSE) {
+            printf("Id client number not valid\n");
+        } else{
+            strcpy(client->id, id);
+            check = 1;}
     }
-    return client;
+    check = 0;
+    /* Check first name*/
+    while (check != 1) {
+        printf("Enter first name: \n");
+        scanf("%s", first_name);
+        if (valid_char_check(first_name) == FALSE) {
+            printf("Client first name not valid\n");
+        } else{
+            client->first_name = dupstr(first_name);
+            check = 1;}
+    }
+    check = 0;
+    /* Check last name*/
+    while (check != 1) {
+        printf("Enter last name: \n");
+        scanf("%s", last_name);
+        if (valid_char_check(last_name) == FALSE) {
+            printf("Client last name not valid\n");
+        } else{
+            client->last_name = dupstr(last_name);
+            check = 1;}
+    }
+    check = 0;
+    /* Check license number*/
+    while (check != 1) {
+        printf("Enter license number (7 digits): \n");
+        scanf("%s", license_num);
+        if (valid_digit_check(license_num) == FALSE || check_equal_size(license_num, LICENSE_LEN) == FALSE) {
+            printf("Client license number not valid\n");
+        } else{
+                strcpy(client->license_number, license_num);
+            check = 1;}
+    }
+    check = 0;
+    /* Check date*/
+    while (check != 1) {
+        printf("Enter date: year , month , day\n");
+        scanf("%d %d %d", &year, &month, &day);
+        date_of_rent = create_date(year, month, day);
+        if (date_of_rent.day == 0) {
+            printf("Date not valid\n");
+        } else{
+            client->date_of_rent = date_of_rent;
+            check = 1;}
+    }
+    check = 0;
+    /* Check time*/
+    while (check != 1) {
+        printf("Enter time: hour , minute\n");
+        scanf("%d %d", &hour, &minute);
+        time_of_rent = create_time(hour, minute);
+        if (time_of_rent.hour == 0) {
+            printf("Time not valid\n");
+        } else{
+            client->hour_of_rent = time_of_rent;
+            check = 1;}
+    }
+    check = 0;
+    /* Check price per rent for 24 hours*/
+    while (check != 1) {
+        printf("Enter price per rent for 24 hours (number of 3 digits): \n");
+        scanf("%d", &price_per_rent);
 
+        if (valid_int(price_per_rent, 100, 999) == FALSE) {
+            printf("Price per rent not valid\n");
+        } else{
+            client->price_per_rent = price_per_rent;
+            check = 1;}
+    }
+
+    return client;
 
 }
 
@@ -292,4 +319,85 @@ int printClientCarsForGivenRentDate(ClientTree *clientTree) {
     printClientCarsForGivenRentDateHelper(clientTree->root, year, month, day,&check);
     if (check==0) printf("Clients were not found\n");
     return TRUE;
+}
+
+ClientLinkedNode *addToListC(ClientLinkedNode **ClientHead, Client *client) {
+    /*CREATE CLIENT LIST AND CLIENT STRUCT AND ADD TO THE LINKED LIST */
+    ClientLinkedNode *new;
+    new = (ClientLinkedNode *) checked_malloc(sizeof(ClientLinkedNode));
+    new->data = client;
+    new->next = (*ClientHead);
+    (*ClientHead) = new;
+    return (*ClientHead);
+}
+
+
+ClientLinkedNode *findClientById(ClientNode *root, ClientLinkedNode **head, char idCheck[ID_LEN + 1]) {
+    if ((root) == NULL) {
+        return NULL;
+    }
+    findClientById(root->left, head, idCheck);
+    if (strcmp(root->data->id, idCheck) == 0) {
+        (*head) = addToListC(head, root->data);
+    }
+    findClientById(root->right, head, idCheck);
+    return (*head);
+}
+
+ClientLinkedNode *findClientByDate(ClientNode *root, ClientLinkedNode **head, int year, int month, int day) {
+    if ((root) == NULL) {
+        return NULL;
+    }
+    findClientByDate(root->left, head, year, month, day);
+    if (root->data->date_of_rent.day == day && root->data->date_of_rent.year == year &&
+        root->data->date_of_rent.month == month) {
+        (*head) = addToListC(head, root->data);
+    }
+    findClientByDate(root->right, head, year, month, day);
+    return (*head);
+}
+
+ClientLinkedNode *findClient(ClientTree *clientTree) {
+    int option, year, month, day;
+    int flag = FALSE;
+    char idCheck[ID_LEN + 1];
+    ClientLinkedNode *head = NULL;
+    if (clientTree->root == NULL) {
+        printf("No clients\n");
+        return NULL;
+    }
+
+    printf("For find by ID enter 1:\n");
+    printf("For find by date enter 2:\n");
+    scanf("%d", &option);
+    if (option == 1) {
+        while (flag == FALSE) {
+            printf("Enter ID for finding: \n");
+            scanf("%s", idCheck);
+            if (valid_digit_check(idCheck) == FALSE || check_equal_size(idCheck, ID_LEN) == FALSE) {
+                printf("Invalid ID try again\n");
+            } else flag = TRUE;
+        }
+        if (((strcmp(idCheck, clientTree->root->data->id) == 0))) {
+            head = findClientById(clientTree->root, &head, idCheck);
+        } else if ((strcmp(idCheck, clientTree->root->data->id) < 0)) {
+            head = findClientById(clientTree->root->left, &head, idCheck);
+        } else {
+            head = findClientById(clientTree->root->right, &head, idCheck);
+        }
+
+    }
+    if (option == 2) {
+        while (flag == FALSE) {
+            printf("Enter date: year , month , day\n");
+            scanf("%d %d %d", &year, &month, &day);
+            if (date_valid(year, month, day) == FALSE) {
+                printf("Date not valid try again\n");
+            } else flag = TRUE;
+        }
+        head = findClientByDate(clientTree->root, &head, year, month, day);
+
+    }
+
+    return head;
 }

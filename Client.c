@@ -173,11 +173,6 @@ int addNewClient(ClientTree *clientTree) {
     /* if client is valid add new car to the list*/
     ClientNode *newClient = (ClientNode *) checked_malloc(sizeof(ClientNode));
     newClient->data = initClient();
-    if (newClient->data == NULL) {
-        printf("Client was not added!\n");
-        checked_free(newClient);
-        return FALSE;
-    }
     newClient->left = NULL;
     newClient->right = NULL;
     if (clientTree->root == NULL) {

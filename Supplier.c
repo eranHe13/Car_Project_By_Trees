@@ -101,13 +101,13 @@ SupplierNode *addNodeToTree(SupplierNode *suppRoot, SupplierNode *newSupp) {
         return newSupp;
     } else {
         if (suppRoot->right == NULL || suppRoot->left == NULL) {
-            if (newSupp->data->sum_of_general_deals_withSupp > suppRoot->data->sum_of_general_deals_withSupp) {
+            if (strcmp(newSupp->data->authorized_dealer_num , suppRoot->data->authorized_dealer_num)<=0) {
                 suppRoot->left = addNodeToTree(suppRoot->left, newSupp);
             } else {
                 suppRoot->right = addNodeToTree(suppRoot->right, newSupp);
             }
         } else {
-            if (newSupp->data->sum_of_general_deals_withSupp > suppRoot->data->sum_of_general_deals_withSupp) {
+            if (strcmp(newSupp->data->authorized_dealer_num , suppRoot->data->authorized_dealer_num)<=0) {
                 addNodeToTree(suppRoot->left, newSupp);
             } else {
                 addNodeToTree(suppRoot->right, newSupp);
@@ -170,8 +170,11 @@ SupplierNode *deleteSupplierHelper(SupplierNode *root, char *authorized_dealer_n
         return NULL;
     }
     if (strcmp(root->data->authorized_dealer_num, authorized_dealer_num) != 0) {
-        root->left = deleteSupplierHelper(root->left, authorized_dealer_num, elementCounter);
-        root->right = deleteSupplierHelper(root->left, authorized_dealer_num, elementCounter);
+        if (strcmp(root->data->authorized_dealer_num ,authorized_dealer_num)<=0){
+            root->left = deleteSupplierHelper(root->left, authorized_dealer_num, elementCounter);
+        } else{
+            root->right = deleteSupplierHelper(root->right, authorized_dealer_num, elementCounter);
+        }
     }
 
     if ((root->left == NULL) && (root->right == NULL)) {
@@ -274,8 +277,8 @@ char **threeGreatestSuppliers(SupplierTree *supptree, char threeGreatSupp[3][11]
 
 
 long averageOfSupplierMoney(SupplierNode *temp , int supplierCounter){
-    int sumRight= 0;
-    int sumLeft= 0;
+    long sumRight= 0;
+    long sumLeft= 0;
     if(temp == NULL) {
         return 0;}
     sumLeft = averageOfSupplierMoney(temp->left , supplierCounter);

@@ -49,10 +49,14 @@ typedef struct ClientTree {
     ClientNode *root;
     int elementCount;
 } ClientTree;
+typedef struct ClientLinkedNode{
+    Client *data;
+    struct ClientLinkedNode* next;
+}ClientLinkedNode;
 ClientTree *createClientTree();
 int addNewClient(ClientTree *clientTree);
 int deleteClient(ClientTree *tree);
 int deleteAllClients(ClientTree* tree);
 int printClientCarsForGivenRentDate(ClientTree *clientTree);
-
+ClientLinkedNode* findClient(ClientTree *clientTree);
 #endif

@@ -284,6 +284,7 @@ char **threeGreatestSuppliers(SupplierTree *supptree, char threeGreatSupp[3][11]
 
 
 double averageOfSupplierMoney(SupplierNode *temp, int supplierCounter) {
+    /*return the average of all sum of deals*/
     double sumRight;
     double sumLeft;
     if (temp == NULL) {

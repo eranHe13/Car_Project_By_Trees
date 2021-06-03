@@ -3,12 +3,12 @@
 
 void clientNumberWithGivenCarYearHelperSecond(CarNode *carNode, ClientNode *clientNode, int *counter) {
     if (clientNode == NULL) {
-        return ;
+        return;
     }
     if (strcmp(carNode->data->license_number, clientNode->data->license_number) == 0) {
         (*counter)++;
         printf("%s\n", carNode->data->license_number);
-        return ;
+        return;
     }
     clientNumberWithGivenCarYearHelperSecond(carNode, clientNode->left, counter);
     clientNumberWithGivenCarYearHelperSecond(carNode, clientNode->right, counter);
@@ -19,11 +19,11 @@ void clientNumberWithGivenCarYearHelperFirst(CarNode *carNode, ClientNode *clien
     if (carNode == NULL) {
         return;
     }
-    if (carNode->data->year_manufacture == carManufactureYear){
+    if (carNode->data->year_manufacture == carManufactureYear) {
         clientNumberWithGivenCarYearHelperSecond(carNode, clientNode, counter);
     }
-    clientNumberWithGivenCarYearHelperFirst(carNode->left,clientNode,counter,carManufactureYear);
-    clientNumberWithGivenCarYearHelperFirst(carNode->right,clientNode,counter,carManufactureYear);
+    clientNumberWithGivenCarYearHelperFirst(carNode->left, clientNode, counter, carManufactureYear);
+    clientNumberWithGivenCarYearHelperFirst(carNode->right, clientNode, counter, carManufactureYear);
 }
 
 int clientNumberWithGivenCarYear(CarTree *carTree, ClientTree *clientTree) {
@@ -35,7 +35,7 @@ int clientNumberWithGivenCarYear(CarTree *carTree, ClientTree *clientTree) {
     }
     printf("Enter car manufacture year:  \n");
     scanf("%d", &carManufactureYear);
-    if (valid_int(carManufactureYear, 1930, 2022) == 0){
+    if (valid_int(carManufactureYear, 1930, 2022) == 0) {
         printf("NOT VALID YEAR\n");
         return 0;
     }

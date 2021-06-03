@@ -2,8 +2,6 @@
 #include "Car.h"
 
 
-
-
 CarTree *createCarTree() {
     CarTree *tree = (CarTree *) checked_malloc(sizeof(CarTree));
     tree->root = NULL;
@@ -33,9 +31,10 @@ Car *init_car() {
         scanf("%s", license_number);
         if ((check_equal_size(license_number, LICENSE_NUM_LEN) == 0) || (valid_digit_check(license_number) == 0)) {
             printf("license number not valid\n");
-        } else{
+        } else {
             strcpy(car->license_number, license_number);
-            check = 1;}
+            check = 1;
+        }
     }
     check = 0;
     /* Check chassis number*/
@@ -44,9 +43,10 @@ Car *init_car() {
         scanf("%s", chassis_number);
         if ((check_equal_size(chassis_number, CHASSIS_NUM_LEN) == 0) || (valid_digit_check(chassis_number) == 0)) {
             printf("Chassis number not valid\n");
-        } else{
+        } else {
             strcpy(car->chassis_number, chassis_number);
-            check = 1;}
+            check = 1;
+        }
     }
     check = 0;
     /* Check maker*/
@@ -55,9 +55,10 @@ Car *init_car() {
         scanf("%s", maker);
         if (valid_char_check(maker) == 0) {
             printf("Maker not valid\n");
-        } else{
+        } else {
             car->maker = dupstr(maker);
-            check = 1;}
+            check = 1;
+        }
     }
     check = 0;
     /* Check model*/
@@ -66,9 +67,10 @@ Car *init_car() {
         scanf("%s", model);
         if (valid_char_check(model) == 0) {
             printf("Model not valid\n");
-        } else{
+        } else {
             car->model = dupstr(model);
-            check = 1;}
+            check = 1;
+        }
     }
     check = 0;
     /* Check color*/
@@ -77,64 +79,70 @@ Car *init_car() {
         scanf("%s", color);
         if (valid_char_check(color) == 0) {
             printf("Color not valid\n");
-        } else{
+        } else {
             car->color = dupstr(color);
-            check = 1;}
+            check = 1;
+        }
     }
     check = 0;
     /* Check year of manufacture*/
     while (check != 1) {
         printf("Enter year of manufacture (number of 4 digits):\n");
         scanf("%d", &year_manufacture);
-        if (valid_int(year_manufacture, 1930, 2022) == 0){
+        if (valid_int(year_manufacture, 1930, 2022) == 0) {
             printf("Manufacture year not valid\n");
-        } else{
+        } else {
             car->year_manufacture = year_manufacture;
-            check = 1;}
+            check = 1;
+        }
     }
     check = 0;
     /* Check price that paid */
     while (check != 1) {
         printf("Enter price that paid for the car:\n");
         scanf("%d", &price_that_paid);
-        if (valid_int(price_that_paid, 0, 1000000) == 0){
+        if (valid_int(price_that_paid, 0, 1000000) == 0) {
             printf("Price that paid not valid\n");
-        } else{
+        } else {
             car->price_that_paid = price_that_paid;
-            check = 1;}
+            check = 1;
+        }
     }
     check = 0;
     /* Check year that car get on road */
     while (check != 1) {
         printf("Enter year that car get on road (number of 4 digits):\n");
         scanf("%d", &year_get_on_road);
-        if (valid_int(year_get_on_road, year_manufacture - 1, 2022) == 0){
+        if (valid_int(year_get_on_road, year_manufacture - 1, 2022) == 0) {
             printf("Year that car get on road not valid\n");
-        } else{
+        } else {
             car->year_get_on_road = year_get_on_road;
-            check = 1;}
+            check = 1;
+        }
     }
     check = 0;
     /* Check present car price */
     while (check != 1) {
         printf("Enter present car price :\n");
         scanf("%d", &present_car_price);
-        if (valid_int(present_car_price, 0, 1000000) == 0){
+        if (valid_int(present_car_price, 0, 1000000) == 0) {
             printf("Present car price not valid\n");
-        } else{
+        } else {
             car->present_car_price = present_car_price;
-            check = 1;}
+            check = 1;
+        }
     }
     check = 0;
     /* Check engine capacity */
     while (check != 1) {
         printf("Enter engine capacity (number of 4 digits):\n");
         scanf("%d", &engine_cap);
-        if (valid_int(engine_cap, 1000, 10000) == 0){
+        if (valid_int(engine_cap, 1000, 10000) == 0) {
             printf("Engine capacity not valid\n");
-        } else{
+        } else {
             car->engine_cap = engine_cap;
-            check = 1;}
+            check = 1;
+        }
     }
 
     return car;
@@ -184,18 +192,18 @@ void freeCar(CarNode *carNode) {
     checked_free(carNode);
 }
 
-CarNode *deleteCarHelper(CarNode* root, char *licenseNumberCheck, int* elementCounter) {
+CarNode *deleteCarHelper(CarNode *root, char *licenseNumberCheck, int *elementCounter) {
     if (root == NULL) {
         return NULL;
     }
     if (strcmp(licenseNumberCheck, root->data->license_number) != 0) {
         if (strcmp(licenseNumberCheck, root->data->license_number) < 0) {
-            root->left = deleteCarHelper(root->left, licenseNumberCheck,elementCounter);
+            root->left = deleteCarHelper(root->left, licenseNumberCheck, elementCounter);
         } else {
-            root->right = deleteCarHelper(root->right, licenseNumberCheck,elementCounter);
+            root->right = deleteCarHelper(root->right, licenseNumberCheck, elementCounter);
         }
         return root;
-    }else {
+    } else {
         if ((root->left == NULL) && (root->right == NULL)) {
             freeCar(root);
             (*elementCounter)--;
@@ -239,16 +247,16 @@ int deleteCar(CarTree *tree) {
         printf("License number is not valid\n");
         return FALSE;
     }
-    tree->root =  deleteCarHelper(tree->root, licenseNumberCheck,&tree->elementCount);
-    if(tmpCount==tree->elementCount){
+    tree->root = deleteCarHelper(tree->root, licenseNumberCheck, &tree->elementCount);
+    if (tmpCount == tree->elementCount) {
         printf("Car doesnt found\n");
     } else printf("Car has been deleted\n");
     return TRUE;
 
 }
 
-void carNodeClear(CarNode* node){
-    if (node == NULL){
+void carNodeClear(CarNode *node) {
+    if (node == NULL) {
         return;
     }
     carNodeClear(node->left);
@@ -256,8 +264,8 @@ void carNodeClear(CarNode* node){
     freeCar(node);
 }
 
-int deleteAllCars(CarTree* tree){
-    if (tree->root == NULL){
+int deleteAllCars(CarTree *tree) {
+    if (tree->root == NULL) {
         tree->elementCount = 0;
         printf("Tree empty\n");
         return TRUE;
@@ -269,23 +277,23 @@ int deleteAllCars(CarTree* tree){
     return TRUE;
 }
 
-int carNumberWithGivenCapacityHelper(CarNode* root, int engineCapacity){
-    int sumR,sumL;
+int carNumberWithGivenCapacityHelper(CarNode *root, int engineCapacity) {
+    int sumR, sumL;
     int counter = 0;
-    if (root==NULL){
+    if (root == NULL) {
         return 0;
     }
-    if (root->data->engine_cap==engineCapacity){
+    if (root->data->engine_cap == engineCapacity) {
         counter = 1;
-    } else{
+    } else {
         counter = 0;
     }
-    sumR = carNumberWithGivenCapacityHelper(root->right,engineCapacity);
-    sumL = carNumberWithGivenCapacityHelper(root->left,engineCapacity);
-    return sumR + sumL +counter;
+    sumR = carNumberWithGivenCapacityHelper(root->right, engineCapacity);
+    sumL = carNumberWithGivenCapacityHelper(root->left, engineCapacity);
+    return sumR + sumL + counter;
 }
 
-int carNumberWithGivenCapacity(CarTree* tree){
+int carNumberWithGivenCapacity(CarTree *tree) {
     int counter = 0;
     int engineCapacity;
     if (tree == NULL) {
@@ -293,9 +301,9 @@ int carNumberWithGivenCapacity(CarTree* tree){
         return 0;
     }
     printf("Enter engine capacity\n");
-    scanf("%d",&engineCapacity);
+    scanf("%d", &engineCapacity);
 
-    counter = carNumberWithGivenCapacityHelper(tree->root,engineCapacity);
+    counter = carNumberWithGivenCapacityHelper(tree->root, engineCapacity);
     return counter;
 
 }

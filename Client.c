@@ -70,9 +70,10 @@ Client *initClient() {
         scanf("%s", id);
         if (valid_digit_check(id) == FALSE || check_equal_size(id, ID_LEN) == FALSE) {
             printf("Id client number not valid\n");
-        } else{
+        } else {
             strcpy(client->id, id);
-            check = 1;}
+            check = 1;
+        }
     }
     check = 0;
     /* Check first name*/
@@ -81,9 +82,10 @@ Client *initClient() {
         scanf("%s", first_name);
         if (valid_char_check(first_name) == FALSE) {
             printf("Client first name not valid\n");
-        } else{
+        } else {
             client->first_name = dupstr(first_name);
-            check = 1;}
+            check = 1;
+        }
     }
     check = 0;
     /* Check last name*/
@@ -92,9 +94,10 @@ Client *initClient() {
         scanf("%s", last_name);
         if (valid_char_check(last_name) == FALSE) {
             printf("Client last name not valid\n");
-        } else{
+        } else {
             client->last_name = dupstr(last_name);
-            check = 1;}
+            check = 1;
+        }
     }
     check = 0;
     /* Check license number*/
@@ -103,9 +106,10 @@ Client *initClient() {
         scanf("%s", license_num);
         if (valid_digit_check(license_num) == FALSE || check_equal_size(license_num, LICENSE_LEN) == FALSE) {
             printf("Client license number not valid\n");
-        } else{
-                strcpy(client->license_number, license_num);
-            check = 1;}
+        } else {
+            strcpy(client->license_number, license_num);
+            check = 1;
+        }
     }
     check = 0;
     /* Check date*/
@@ -115,9 +119,10 @@ Client *initClient() {
         date_of_rent = create_date(year, month, day);
         if (date_of_rent.day == 0) {
             printf("Date not valid\n");
-        } else{
+        } else {
             client->date_of_rent = date_of_rent;
-            check = 1;}
+            check = 1;
+        }
     }
     check = 0;
     /* Check time*/
@@ -127,9 +132,10 @@ Client *initClient() {
         time_of_rent = create_time(hour, minute);
         if (time_of_rent.hour == 0) {
             printf("Time not valid\n");
-        } else{
+        } else {
             client->hour_of_rent = time_of_rent;
-            check = 1;}
+            check = 1;
+        }
     }
     check = 0;
     /* Check price per rent for 24 hours*/
@@ -139,9 +145,10 @@ Client *initClient() {
 
         if (valid_int(price_per_rent, 100, 999) == FALSE) {
             printf("Price per rent not valid\n");
-        } else{
+        } else {
             client->price_per_rent = price_per_rent;
-            check = 1;}
+            check = 1;
+        }
     }
 
     return client;
@@ -202,52 +209,55 @@ ClientNode *deleteClientHelper(ClientNode *root, char *idCheck, int *elementCoun
             root->right = deleteClientHelper(root->right, idCheck, elementCounter);
         }
         return root;
-    }
-    else{
-    if ((root->left == NULL) && (root->right == NULL)) {
-        freeClient(root);
-        (*elementCounter)--;
-        return NULL;
-    } else if (root->left == NULL) {
-        ClientNode *temp = root->right;
-        freeClient(root);
-        (*elementCounter)--;
-        return temp;
-    } else if (root->right == NULL) {
-        ClientNode *temp = root->left;
-        freeClient(root);
-        (*elementCounter)--;
-        return temp;
     } else {
-        ClientNode *x = root->right;
-        Client *temp = root->data;
-        ClientNode **xParent = &(root->right);
-        while (x->left) {
-            xParent = &(x->left);
-            x = x->left;
+        if ((root->left == NULL) && (root->right == NULL)) {
+            freeClient(root);
+            (*elementCounter)--;
+            return NULL;
+        } else if (root->left == NULL) {
+            ClientNode *temp = root->right;
+            freeClient(root);
+            (*elementCounter)--;
+            return temp;
+        } else if (root->right == NULL) {
+            ClientNode *temp = root->left;
+            freeClient(root);
+            (*elementCounter)--;
+            return temp;
+        } else {
+            ClientNode *x = root->right;
+            Client *temp = root->data;
+            ClientNode **xParent = &(root->right);
+            while (x->left) {
+                xParent = &(x->left);
+                x = x->left;
+            }
+            root->data = x->data;
+            x->data = temp;
+            *xParent = deleteClientHelper(x, x->data->id, elementCounter);
         }
-        root->data = x->data;
-        x->data = temp;
-        *xParent = deleteClientHelper(x, x->data->id, elementCounter);
-    }}
+    }
     return root;
 }
 
 int deleteClient(ClientTree *tree) {
     int tmp = tree->elementCount;
     char idCheck[ID_LEN + 1];
+    int flag = FALSE;
     if (tree == NULL) {
         printf("NO clients\n");
         return FALSE;
     }
-    printf("Enter ID of client to be deleted: \n");
-    scanf("%s", idCheck);
-    if (valid_digit_check(idCheck) == 0 || check_equal_size(idCheck, ID_LEN) == 0) {
-        printf("ID is not valid\n");
-        return FALSE;
+    while (flag == FALSE) {
+        printf("Enter ID of client to be deleted: \n");
+        scanf("%s", idCheck);
+        if (valid_digit_check(idCheck) == 0 || check_equal_size(idCheck, ID_LEN) == 0) {
+            printf("ID is not valid try again\n");
+        } else flag = TRUE;
     }
+
     tree->root = deleteClientHelper(tree->root, idCheck, &tree->elementCount);
-    if(tree->elementCount == tmp) printf("Client doesnt found\n");
+    if (tree->elementCount == tmp) printf("Client doesnt found\n");
     else printf("Car removed\n");
     return TRUE;
 
@@ -266,7 +276,7 @@ int deleteAllClients(ClientTree *tree) {
     if (tree == NULL) {
         tree->elementCount = 0;
         printf("Tree empty\n");
-        return TRUE;
+        return FALSE;
     }
     clientNodeClear(tree->root);
     tree->elementCount = 0;
@@ -275,7 +285,7 @@ int deleteAllClients(ClientTree *tree) {
     return TRUE;
 }
 
-int printClientCarsForGivenRentDateHelper(ClientNode *clientNode, int year, int month, int day,int* counter) {
+int printClientCarsForGivenRentDateHelper(ClientNode *clientNode, int year, int month, int day, int *counter) {
     if (clientNode == NULL) {
         return 0;
     }
@@ -296,7 +306,7 @@ int printClientCarsForGivenRentDateHelper(ClientNode *clientNode, int year, int 
         (*counter)++;
     }
     printClientCarsForGivenRentDateHelper(clientNode->left, year, month, day, counter);
-    printClientCarsForGivenRentDateHelper(clientNode->right, year, month, day,counter);
+    printClientCarsForGivenRentDateHelper(clientNode->right, year, month, day, counter);
     return *counter;
 }
 
@@ -315,8 +325,8 @@ int printClientCarsForGivenRentDate(ClientTree *clientTree) {
         printf("date not valid \n");
         return 0;
     }
-    printClientCarsForGivenRentDateHelper(clientTree->root, year, month, day,&check);
-    if (check==0) printf("Clients were not found\n");
+    printClientCarsForGivenRentDateHelper(clientTree->root, year, month, day, &check);
+    if (check == 0) printf("Clients were not found\n");
     return TRUE;
 }
 

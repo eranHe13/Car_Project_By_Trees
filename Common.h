@@ -5,5 +5,7 @@
 #include "Car.h"
 #include "Supplier.h"
 #include "Client.h"
+
 int clientNumberWithGivenCarYear(CarTree *carTree, ClientTree *clientTree);
+
 #endif

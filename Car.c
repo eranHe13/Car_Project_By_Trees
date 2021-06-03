@@ -195,41 +195,40 @@ CarNode *deleteCarHelper(CarNode* root, char *licenseNumberCheck, int* elementCo
             root->right = deleteCarHelper(root->right, licenseNumberCheck,elementCounter);
         }
         return root;
-    }
-    if ((root->left == NULL) && (root->right == NULL)) {
-        freeCar(root);
-        (*elementCounter)--;
-        return NULL;
-    }
-    else if(root->left==NULL){
-        CarNode* temp = root->right;
-        freeCar(root);
-        (*elementCounter)--;
-        return temp;
-    }
-    else if(root->right==NULL){
-        CarNode* temp = root->left;
-        freeCar(root);
-        (*elementCounter)--;
-        return temp;
-    }
-    else{
-        CarNode*  x = root->right;
-        Car* temp = root->data;
-        CarNode** xParent = &(root->right);
-        while (x->left){
-            xParent = &(x->left);
-            x = x->left;
+    }else {
+        if ((root->left == NULL) && (root->right == NULL)) {
+            freeCar(root);
+            (*elementCounter)--;
+            return NULL;
+        } else if (root->left == NULL) {
+            CarNode *temp = root->right;
+            freeCar(root);
+            (*elementCounter)--;
+            return temp;
+        } else if (root->right == NULL) {
+            CarNode *temp = root->left;
+            freeCar(root);
+            (*elementCounter)--;
+            return temp;
+        } else {
+            CarNode *x = root->right;
+            Car *temp = root->data;
+            CarNode **xParent = &(root->right);
+            while (x->left) {
+                xParent = &(x->left);
+                x = x->left;
+            }
+            root->data = x->data;
+            x->data = temp;
+            *xParent = deleteCarHelper(x, x->data->license_number, elementCounter);
         }
-        root->data = x->data;
-        x->data = temp;
-        *xParent = deleteCarHelper(x,x->data->license_number,elementCounter);
     }
     return root;
 }
 
 int deleteCar(CarTree *tree) {
     char licenseNumberCheck[LICENSE_NUM_LEN + 1];
+    int tmpCount = tree->elementCount;
     if (tree->root == NULL) {
         printf("NO cars\n");
         return FALSE;
@@ -241,6 +240,9 @@ int deleteCar(CarTree *tree) {
         return FALSE;
     }
     tree->root =  deleteCarHelper(tree->root, licenseNumberCheck,&tree->elementCount);
+    if(tmpCount==tree->elementCount){
+        printf("Car doesnt found\n");
+    } else printf("Car has been deleted\n");
     return TRUE;
 
 }

@@ -147,7 +147,7 @@ void menu(SupplierTree *supplierTree, ClientTree *clientTree, CarTree *carTree) 
                 threeGreatestSuppliers(supplierTree, threeGreatSupplier);
                 break;
             case 8:
-                printf("Average of suppliers money : %ld\n", averageOfSupplierMoney(supplierTree->root,supplierTree->elementCount));
+                printf("Average of suppliers money : %.2f\n", averageOfSupplierMoney(supplierTree->root,supplierTree->elementCount));
                 break;
             case 9:
                 printClientCarsForGivenRentDate(clientTree);
